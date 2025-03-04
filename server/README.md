@@ -21,18 +21,28 @@ This capstone project involves developing a Wellness & Productivity App to help 
 
 ## 3. Core Features
   ### 3.1 Authentication
-User Signup/Login: Secure user authentication with signup, login, and password management.
-Protected Routes: Restrict access to productivity data and settings for authenticated users only.
+- Protected Routes: Restrict access to productivity data and settings for authenticated users only. Log in first, then prompt users to sign-up.
+- User Signup/Login: Secure user authentication with signup, login, and password management. Users only have access to thier own Data
   ### 3.2 Timer Functionality
-Customizable Timer:
-Users can set work sessions and break intervals based on their preferences.
-Flexibility to choose work durations and break times.
+Preferences (some flexibility)
+- Users can set work sessions and break intervals based on their preferences.
+- User can set the duration of the session times ( 1 specific time) in min/hrs
+- User can set duration of breaks (1 specific time) in min/hrs.
+- User can set amount of breaks. 
+- Expand pause feature (when cl stops session early)
+Customizable Timer
+- Timer counts down or up from specified duration amount
+- During a break a delightful message is shown
+- Timer stops at the end of a session
+- Sessions are logged to a persistence layer with time of day
+
   ### 3.3 Mood Logging & Insights
 Mood Logging:
-After each session, users can log their mood (e.g., happy, neutral, stressed).
-Data stored to track emotional well-being.
+- After each session, users can log their mood (e.g., happy, neutral, stressed).
+- Data stored to track emotional well-being.
 Basic Data Visualization:
-Charts showing productivity patterns over time (e.g., daily, weekly).
+- Charts showing productivity patterns over time (e.g., daily, weekly).
+      - Charts will show session title, length, breaks, mood, time of day session.
  ###  3.4 Dark Mode
 User Preference:
 Toggle between light and dark modes for a comfortable user experience.
