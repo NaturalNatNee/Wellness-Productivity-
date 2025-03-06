@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const Timer = require("../models/timer.models");
 
 // timer settings needs to be defined before route
 let timerSettings = {
@@ -18,7 +19,7 @@ const userTimers = new Map();
 
 router.get("/timer", (req,res) => {
     /* check if user already has a timer settings stored in memory */
-    if (userTimers.has(req.user.id));/*  if yes return those specific settings */
+    if (userTimers.has(req.user.id)); /*  if yes return those specific settings */
  
 else {
     res.json(timerSettings); /* if not return the default timer settings */
@@ -37,7 +38,7 @@ router.get("/timer", (req, res) => {
 
 // PUT - update timer settings
 // Endpoint localhost:6000/api/timer
-router.put("/timer", (req, res) => {
+router.put("/timer",async (req, res) => {
   try {
     const { sessionTimeEntry, breakTimeEntry, moodScale } = req.body;
 
@@ -66,7 +67,7 @@ router.put("/timer", (req, res) => {
       req.user.id,
       userTimer
     ); /* stores updated timer settings in memory, this allows users to have different timer settings */
- saveTimerToDatabase(req.user.id,  userTimer); 
+  saveTimerToDatabase(req.user.id,  userTimer); 
 
     res.json(timerSettings); /* sends the updated timer settings back to the client as a response */
   } catch (error) /* log any errors that occurs */ {
