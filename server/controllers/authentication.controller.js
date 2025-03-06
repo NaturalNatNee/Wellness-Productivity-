@@ -1,8 +1,12 @@
-const express = require("express");
+// Changed all the requires to imports
+
+import express from "express";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import User from "../models/user-model.js";// fixed the path
+import auth from "../middleware/auth-middleware.js";// added this line
+
 const router = express.Router();
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../models/user-model");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post("/register", async (req, res) => {
