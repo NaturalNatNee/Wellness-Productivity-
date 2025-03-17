@@ -7,7 +7,7 @@ let timerSettings = {
   breakTimeEntry: 5,
   sessionRemainingSeconds: 1500,
   breakRemainingSeconds: 300,
-  running: false,
+  running: false, 
   timerLabel: "Session",
 };
 // GET - retrieve current timer settings
