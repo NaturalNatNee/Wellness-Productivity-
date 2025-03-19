@@ -2,7 +2,7 @@
   "name": "wellness-productivity-",
   "version": "1.0.0",
   "description": "This repository is for practicing fullstack web development",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
