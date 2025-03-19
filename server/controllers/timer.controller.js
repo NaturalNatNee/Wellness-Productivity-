@@ -8,6 +8,7 @@ const Timer = require("../models/timer.models");
 const userTimers = new Map();
 
 // GET - retrieve current timer settings
+
 // Endpoint: localhost:6000/api/newtimer -> NEEDS TESTED
 
 router.post("/newTimer", async (req, res) => {
@@ -139,3 +140,4 @@ function save(data) {
 }
 
 module.exports = router;
+
