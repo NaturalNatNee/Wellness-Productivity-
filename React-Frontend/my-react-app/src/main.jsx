@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 
 import './index.css'
 import App from './App.jsx'
+import Timer from './components/timer/Timer.jsx'
 
 
 createRoot(document.getElementById('root')).render(

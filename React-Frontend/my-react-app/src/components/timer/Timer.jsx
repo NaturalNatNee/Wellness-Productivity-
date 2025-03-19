@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import Rating from "./Rating";
 import "./timer.css";
 
@@ -160,17 +161,20 @@ function Timer() {
         </h3>
       </div>
       <div className="timer-container">
+
         <input
           className="time"
           type="number"
           placeholder="hour"
           onChange={(e) => setHours(Number(e.target.value))} // Update the hours state when the user inputs a value
           disabled={isTimeAvailable} // Disable the input if the timer is running
+
         />
         <input
           className="time"
           type="number"
           placeholder="minutes"
+
           onChange={(e) => setMinutes(Number(e.target.value))} // Update the minutes state when the user inputs a value
           disabled={isTimeAvailable} // Disable the input if the timer is running
         />
@@ -180,10 +184,12 @@ function Timer() {
           placeholder="break minutes"
           onChange={(e) => setBreakMinutes(Number(e.target.value))} // Update the break duration when the user inputs a value
           disabled={isTimeAvailable} // Disable the input if the timer is running
+
         />
         <input
           className="time"
           type="number"
+
           placeholder="break count"
           onChange={(e) => setBreakCount(Number(e.target.value))} // Update the number of breaks when the user inputs a value
           disabled={isTimeAvailable} // Disable the input if the timer is running
@@ -232,6 +238,7 @@ function Timer() {
         </div>
       )}
     </div>
+
   );
 }
 
