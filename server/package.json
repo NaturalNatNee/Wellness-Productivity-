@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "This repository is for practicing fullstack web development",
   "main": "app.js",
+   "type": "module",
+}
+
   "scripts": {
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
@@ -19,10 +23,12 @@
   },
   "homepage": "https://github.com/NaturalNatNee/Wellness-Productivity-#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.13.1",
-    "mongoose": "^8.11.0",
+    "mongoose": "^8.12.1",
     "nodemon": "^3.1.9"
   }
 }
