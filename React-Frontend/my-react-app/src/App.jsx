@@ -1,3 +1,4 @@
+
 import Signup from "./components/authentication/sign-up";
 
 
@@ -12,5 +13,6 @@ return (
     </Router>
 );
 }
+
 
 export default App;

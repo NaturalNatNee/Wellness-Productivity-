@@ -1,87 +1,244 @@
 import React, { useState, useEffect } from "react";
+
+import Rating from "./Rating";
 import "./timer.css";
 
 function Timer() {
-  const [time, setTime] = useState(); // this is the main time we see counting down (hours,minutes and seconds are converted to milliseconds and stored in here)
-  const [hours, setHours] = useState(0); // this is hour place holder it's zero for now but once user inputs hour and hits start this gets the value they added inside hours
-  const [minutes, setMinutes] = useState(0); // this is works like hours
-  const [seconds, setSeconds] = useState(0); // this is works like minutes
+  // State variables to manage the timer and user interactions
+  const [time, setTime] = useState(null); // Tracks the remaining time in milliseconds
+  const [hours, setHours] = useState(0); // Stores the number of hours for the session
+  const [minutes, setMinutes] = useState(0); // Stores the number of minutes for the session
+  const [breakMinutes, setBreakMinutes] = useState(0); // Stores the duration of each break in minutes
+  const [breakCount, setBreakCount] = useState(0); // Stores the number of breaks the user wants
+  const [isRunning, setIsRunning] = useState(false); // Tracks whether the timer is currently running
+  const [nowBreak, setNowBreak] = useState("Session Time"); // Indicates whether it's session time or break time
+  const [countUp, setCountUp] = useState(false); // Determines if the timer counts up or down
+  const [presets, setPresets] = useState([]); // Stores saved timer presets
+  const [selectedPreset, setSelectedPreset] = useState(null); // Tracks the currently selected preset
+  const [sessionCompleted, setSessionCompleted] = useState(false); // Tracks whether the session has been completed
+  const [userRating, setUserRating] = useState(null); // Stores the user's rating for the session
+
+  // Function to calculate the duration of each session segment
+  // This divides the total session time evenly based on the number of breaks
+  const calculateSessionSegment = () => {
+    const totalSessionTime = (hours * 3600 + minutes * 60) * 1000; // Convert hours and minutes to milliseconds
+    return totalSessionTime / (breakCount + 1); // Divide the total time by the number of breaks + 1
+  };
+
+  // Effect to handle the countdown or count-up logic for the timer
   useEffect(() => {
-    // this useEffects handles the count down
+    // If the timer is not running or there is no time left, do nothing
+    if (time === null || time <= 0 || !isRunning) return;
+
+    // Set up an interval to update the timer every second
     const interval = setInterval(() => {
-      setTime((prevTime) => prevTime - 1000); // this subtracts 1000 milliseconds from time(named here as "prevTime") and updates the "time state" using setTime fuction
-    }, 1000); // this means that the useEffect runs every 1000 milisecond (1 second)
+      setTime((prevTime) => (countUp ? prevTime + 1000 : prevTime - 1000)); // Increment or decrement the time
+    }, 1000);
+
+    // Clear the interval when the component unmounts or the timer stops
     return () => clearInterval(interval);
-  });
-  const handleClick = (e) => {
-    // this runs when the start button is clicked
-    const milliseconds = (hours * 3600 + minutes * 60 + seconds) * 1000; // here is where the millisecond is being calculated
-    setTime(milliseconds); // the time useState is being asigned using setTime()
+  }, [time, isRunning, countUp]);
+
+  // Effect to handle transitions between session time and break time
+  useEffect(() => {
+    // If the timer reaches 0, determine what to do next
+    if (time === 0) {
+      if (nowBreak === "Session Time" && breakCount > 0) {
+        // If it's session time and there are breaks left, switch to break time
+        setNowBreak("Break Time");
+        setTime(breakMinutes * 60000); // Set the timer for the break duration
+        showWellnessTip(); // Show a wellness tip during the break
+      } else if (nowBreak === "Break Time") {
+        // If it's break time, switch back to session time
+        setNowBreak("Session Time");
+        setBreakCount((prev) => prev - 1); // Decrease the number of remaining breaks
+        setTime(calculateSessionSegment()); // Set the timer for the next session segment
+      } else {
+        // If there are no more breaks or session segments, mark the session as completed
+        setIsRunning(false);
+        setSessionCompleted(true);
+        logSession(); // Log the session details
+      }
+    }
+  }, [time, nowBreak, breakCount, breakMinutes, hours, minutes]);
+
+  // Function to start or pause the timer
+  const handleStartPauseClick = () => {
+    if (isRunning) {
+      // If the timer is running, pause it
+      setIsRunning(false);
+    } else if (time > 0) {
+      // If there is time left, resume the timer
+      setIsRunning(true);
+    } else {
+      // If the timer is not running and no time is set, start a new session
+      const sessionSegment = calculateSessionSegment(); // Calculate the duration of the first session segment
+      setTime(sessionSegment); // Set the timer
+      setIsRunning(true); // Start the timer
+      setSessionCompleted(false); // Reset the session completion status
+    }
   };
 
-  const handleHoursChange = (e) => {
-    // this runs when hour is set
-    setHours(Number(e.target.value)); // this takes the hour set by user and converts it into number then sets it as the hour
-  };
-  const handleMinutesChange = (e) => {
-    // this runs when minutes is set
-    setMinutes(Number(e.target.value));
-  };
-  const handleSecondsChange = (e) => {
-    // this runs when second is set
-    setSeconds(Number(e.target.value));
-  };
-
-  const formatedTime = () => {
-    // this formats the time by taking the milliseconds and and calculating how much hours, minutes and seconds is left
-    let seconds = time / 1000;
-    let minutes = Math.floor(seconds / 60);
-    let hours = Math.floor(minutes / 60);
-    seconds = seconds % 60; // this makes sure that the timer starts counting down from 59-0
-    minutes = minutes % 60;
-    const isHour = hours > 0;
-    const isMinute = minutes > 0;
-    return `${isHour ? hours + ":" : ""}${
-      isMinute ? minutes + ":" : ""
-    }${seconds}`; // returns formatted time to be displayed (if hour and minute are zero they are set to not be displayed)
+  // Function to save the current timer settings as a preset
+  const handlePresetSave = () => {
+    const newPreset = {
+      hours,
+      minutes,
+      breakMinutes,
+      breakCount,
+    }; // Create a new preset object with the current settings
+    const updatedPresets = [...presets, newPreset]; // Add the new preset to the list of presets
+    setPresets(updatedPresets); // Update the state with the new list of presets
+    localStorage.setItem("timerPresets", JSON.stringify(updatedPresets)); // Save the presets to localStorage
   };
 
-  const isTimeAvailable = time > -1;
+  // Function to load a selected preset into the timer settings
+  const handlePresetSelect = (preset) => {
+    setHours(preset.hours); // Set the hours from the preset
+    setMinutes(preset.minutes); // Set the minutes from the preset
+    setBreakMinutes(preset.breakMinutes); // Set the break duration from the preset
+    setBreakCount(preset.breakCount); // Set the number of breaks from the preset
+    setSelectedPreset(preset); // Mark the preset as selected
+  };
 
+  // Function to display a random wellness tip during breaks
+  const showWellnessTip = () => {
+    const tips = [
+      "Drink plenty of water throughout the day to stay hydrated.",
+      "Start your day with a healthy breakfast to boost your energy levels",
+      "Practice mindfulness for 5-10 minutes every morning to reduce stress.",
+      "Incorporate more fruits and vegetables into your diet for better health",
+      "Get at least 30 minutes of physical activity each day.",
+      "Make sure you're getting 7-8 hours of sleep every night for optimal health",
+      "Take breaks thought the day to stretch and recharge your energy",
+    ]; // List of wellness tips
+    const randomTip = tips[Math.floor(Math.random() * tips.length)]; // Pick a random tip
+    alert(randomTip); // Show the tip in an alert
+  };
+
+  // Function to log the completed session details
+  const logSession = () => {
+    const sessionLog = {
+      date: new Date().toLocaleString(), // Record the date and time of the session
+      sessionTime: `${hours}h ${minutes}m`, // Record the session duration
+      breakTime: `${breakMinutes}m`, // Record the break duration
+      breaks: breakCount, // Record the number of breaks
+      rating: userRating, // Record the user's rating
+    }; // Create a log object with the session details
+    const logs = JSON.parse(localStorage.getItem("sessionLogs")) || []; // Retrieve existing logs from localStorage
+    logs.push(sessionLog); // Add the new log to the list
+    localStorage.setItem("sessionLogs", JSON.stringify(logs)); // Save the updated logs to localStorage
+  };
+
+  // Function to check if there is time left in the timer
+  const isTimeAvailable = time !== null && time > 0;
+
+  // Function to format the remaining time into a human-readable format (HH:MM:SS)
+  const formattedTime = () => {
+    let totalSeconds = Math.max(time / 1000, 0); // Convert milliseconds to seconds
+    const hours = Math.floor(totalSeconds / 3600); // Calculate the number of hours
+    totalSeconds %= 3600; // Remove the hours from the total seconds
+    const minutes = Math.floor(totalSeconds / 60); // Calculate the number of minutes
+    const seconds = totalSeconds % 60; // Calculate the remaining seconds
+
+    return `${hours > 0 ? `${hours}:` : ""}${minutes > 0 ? `${minutes}:` : ""}${
+      seconds < 10 ? `0${seconds}` : seconds
+    }`; // Format the time as HH:MM:SS
+  };
+
+  // Render the timer UI and handle user interactions
   return (
-    <>  <h1 className="timer">
-          {isTimeAvailable ? formatedTime() : "Set Session"}
+    <div className="container">
+      <div className="clock">
+        <h1 className="timer">
+          {isTimeAvailable ? formattedTime() : "Set Session"}{" "}
+          {/* Display the formatted time or a placeholder */}
         </h1>
-        <h3 className= "breake">Set Break</h3>
+        <h3 className="break">
+          {isTimeAvailable
+            ? `${nowBreak}, ${breakCount}'s left` // Display the current state (session or break) and remaining breaks
+            : "Set Break"}
+        </h3>
+      </div>
       <div className="timer-container">
-      
+
         <input
           className="time"
           type="number"
           placeholder="hour"
-          onChange={handleHoursChange}
-          disabled={isTimeAvailable}
+          onChange={(e) => setHours(Number(e.target.value))} // Update the hours state when the user inputs a value
+          disabled={isTimeAvailable} // Disable the input if the timer is running
+
         />
         <input
           className="time"
           type="number"
           placeholder="minutes"
-          onChange={handleMinutesChange}
-          disabled={isTimeAvailable}
+
+          onChange={(e) => setMinutes(Number(e.target.value))} // Update the minutes state when the user inputs a value
+          disabled={isTimeAvailable} // Disable the input if the timer is running
         />
         <input
           className="time"
           type="number"
-          placeholder="seconds"
-          onChange={handleSecondsChange}
-          disabled={isTimeAvailable}
+          placeholder="break minutes"
+          onChange={(e) => setBreakMinutes(Number(e.target.value))} // Update the break duration when the user inputs a value
+          disabled={isTimeAvailable} // Disable the input if the timer is running
+
         />
-        <button onClick={handleClick} disabled={isTimeAvailable}>
-          start
+        <input
+          className="time"
+          type="number"
+
+          placeholder="break count"
+          onChange={(e) => setBreakCount(Number(e.target.value))} // Update the number of breaks when the user inputs a value
+          disabled={isTimeAvailable} // Disable the input if the timer is running
+        />
+        <button onClick={handleStartPauseClick}>
+          {isRunning ? "Pause" : "Start"}{" "}
+          {/* Display "Pause" if the timer is running, otherwise "Start" */}
         </button>
-        <button onClick={() => setTime(-1)}>reset</button>
+        <button
+          onClick={() => {
+            setTime(null); // Reset the timer
+            setIsRunning(false); // Stop the timer
+            setNowBreak("Session Time"); // Reset to session time
+            setSessionCompleted(false); // Reset the session completion status
+          }}
+        >
+          Reset
+        </button>
+        <button onClick={handlePresetSave}>Save Preset</button>
+        <select
+          onChange={
+            (e) => handlePresetSelect(JSON.parse(e.target.value)) // Load the selected preset
+          }
+          disabled={isTimeAvailable} // Disable the dropdown if the timer is running
+        >
+          <option value="">Select Preset</option>
+          {presets.map((preset, index) => (
+            <option key={index} value={JSON.stringify(preset)}>
+              {`${preset.hours}h ${preset.minutes}m, ${
+                preset.breakMinutes / 60000
+              }m break, ${preset.breakCount} breaks`}{" "}
+              {/* Display the preset details */}
+            </option>
+          ))}
+        </select>
+        <button onClick={() => setCountUp(!countUp)}>
+          {countUp ? "Count Down" : "Count Up"}{" "}
+          {/* Toggle between count up and count down */}
+        </button>
       </div>
-    </>
+      {sessionCompleted && (
+        <div className="rating-section">
+          <h3>Rate Your Session</h3>
+          <Rating onRate={(rating) => setUserRating(rating)} />{" "}
+          {/* Allow the user to rate the session */}
+        </div>
+      )}
+    </div>
+
   );
 }
 
