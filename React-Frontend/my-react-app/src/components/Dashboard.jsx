@@ -40,8 +40,8 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      <header className="dashboard-header">
-        <h1>Wellness & Productivity Dashboard</h1>
+      <header classNa me="dashboard-header">
+        <h1>Dashboard</h1>
         <button className="logout-btn" onClick={handleLogout}>
           Logout
         </button>
@@ -49,29 +49,29 @@ function Dashboard() {
 
       <div className="user-welcome">
         <h2>Welcome, {user?.firstName || "User"}!</h2>
-        <p>Track your productivity and wellness journey here.</p>
+        <p>Productivity and Wellness Tracking</p>
       </div>
 
       <div className="dashboard-grid">
         <div className="dashboard-card">
           <h3>Start a Timer Session</h3>
-          <p>Focus on your work with customizable timer sessions.</p>
+          <p>Timer</p>
           <button className="primary-btn" onClick={() => navigate("/timer")}>
             Start Timer
           </button>
         </div>
 
         <div className="dashboard-card">
-          <h3>View Progress</h3>
-          <p>See insights from your productivity and wellness data.</p>
+          <h3>Insights</h3>
+          <p></p>
           <button className="primary-btn" onClick={() => navigate("/progress")}>
             View Stats
           </button>
         </div>
 
         <div className="dashboard-card">
-          <h3>Account Settings</h3>
-          <p>Update your profile and preferences.</p>
+          <h3>Settings and Preferences</h3>
+          <p>Settings and preferences.</p>
           <button
             className="secondary-btn"
             onClick={() => navigate("/profile")}
