@@ -1,22 +1,47 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import authService from "../../services/authService";
 import "./sign-up.css";
 
 function Signup() {
   const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState(""); // Added lastname field
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!firstname || !email || !password || !repeatPassword) {
+    if (!firstname || !lastname || !email || !password || !repeatPassword) {
       setError("All fields are required.");
+      return;
     } else if (password !== repeatPassword) {
       setError("Passwords do not match.");
-    } else {
-      setError("");
-      // Handle signup logic here
+      return;
+    }
+
+    setError("");
+    setLoading(true);
+
+    try {
+      // Call register method from authService
+      await authService.register({
+        firstName: firstname,
+        lastName: lastname,
+        email: email,
+        password: password,
+      });
+
+      // Redirect to dashboard on successful registration
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.message || "Registration failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 

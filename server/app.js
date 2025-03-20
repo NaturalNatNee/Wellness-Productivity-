@@ -2,10 +2,16 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import auth from "./controllers/authentication.controller.js";
+import cors from "cors";
+
 
 dotenv.config();
 
 const app = express();
+
+
+
+
 
 const PORT = process.env.PORT || 3000; // changed 5000 to 3000
 
@@ -22,6 +28,7 @@ mongoose
 
 
 app.use(express.json());
+app.use(cors());
 
 //ROUTES
 app.use("/api/auth", auth);

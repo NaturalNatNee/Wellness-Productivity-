@@ -1,18 +1,35 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import authService from "../../services/authService";
 import "./log-in.css";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
       setError("Both fields are required.");
-    } else {
-      setError("");
-      // Handle login logic here
+      return;
+    }
+    
+    setError("");
+    setLoading(true);
+    
+    try {
+      // Call login method from authService
+      await authService.login({ email, password });
+      // Redirect to dashboard on successful login
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.message || "Login failed. Please check your credentials.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,3 +75,5 @@ function Login() {
     </div>
   );
 }
+
+export default Login;
