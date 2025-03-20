@@ -61,7 +61,7 @@ body {
   max-width: 400px;
 }
 
-.tile {
+.logout-btn {
   height: 120px;
   background-color: var(--tile-bg);
   display: flex;
@@ -70,13 +70,17 @@ body {
   font-size: 1.2rem;
   font-weight: 600;
   border-radius: 15px;
-  cursor: pointer;
-  transition: 200ms ease-in-out;
 }
 
-.tile:hover {
-  background-color: var(--hover-color);
-  transform: scale(1.05);
+.dashboard-box {
+  height: 120px;
+  background-color: var(--tile-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 15px;
 }
 
 /* Responsive Design */
