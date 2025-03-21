@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/authService";
 import "./Dashboard.css"; // Create this file for styling
+import Timer from "./timer/Timer";
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -40,11 +41,13 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      <header className="dashboard-header">
-        <h1>Dashboard</h1>
-        <button className="logout-btn" onClick={handleLogout}>
+      <button className="logout-btn" onClick={handleLogout}>
           Logout
         </button>
+      <header className="dashboard-header">
+        
+        <h1>Dashboard</h1>
+        
       </header>
 
       <div className="user-welcome">
@@ -69,16 +72,7 @@ function Dashboard() {
           </button>
         </div>
 
-        <div className="dashboard-box">
-          <h3>Settings and Preferences</h3>
-          <p>Settings and preferences.</p>
-          <button
-            className="secondary-btn"
-            onClick={() => navigate("/profile")}
-          >
-            Profile Settings
-          </button>
-        </div>
+      
       </div>
     </div>
   );

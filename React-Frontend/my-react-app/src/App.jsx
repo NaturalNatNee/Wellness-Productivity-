@@ -8,10 +8,15 @@ import Login from "./components/authentication/Login";
 import Signup from "./components/authentication/Signup";
 import Dashboard from "./components/Dashboard.jsx";
 import ProtectedRoute from "./components/authentication/ProtectedRoutes"; 
+import TrackingTable from "./components/TrackingTable/TrackingTable.jsx"
+
+import Timer from "./components/timer/Timer";
 
 function App() {
+
   return (
     <Router>
+     
       <Routes>
         {/* Public routes */}
         <Route path="/login" element={<Login />} />
@@ -19,6 +24,8 @@ function App() {
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
+        <Route path="/timer" element={<Timer />} />
+        <Route path="/progress" element={<TrackingTable />} />
           <Route path="/dashboard" element={<Dashboard />} />
           {/* Add other protected routes here */}
         </Route>
@@ -31,5 +38,3 @@ function App() {
 }
 
 export default App;
-
-
