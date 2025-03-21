@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const timerSchema = new mongoose.Schema({
   SessionTitle: { type: String, required: true },
@@ -7,4 +7,6 @@ const timerSchema = new mongoose.Schema({
   userId: { type: mongoose.Types.ObjectId, required: true },
 });
 
-module.exports = mongoose.model('timer', timerSchema);
+const Timer = mongoose.model('Timer', timerSchema);
+
+export default Timer;
