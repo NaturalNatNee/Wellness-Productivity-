@@ -13,19 +13,39 @@ const router = Router();
 
 // Endpoint: localhost:3000/api/newTimer -> NEEDS TESTED
 
+// router.post("/newTimer", validateSession, async (req, res) => {
+//   try { 
+//     if (!token) {
+//     return res.status(401).json({ error: "No token provided" });
+//   }
+//     const { SessionTitle, Break, MoodScale, } =
+//       req.body;
+
+//     const newTimer = new Timer({
+//       SessionTitle: "SessionTitle",
+//       Break: "Break",
+//       MoodScale: "MoodScale"
+    
+//     });
+
+//     await newTimer.save();
+//     res.json({ message: "New Timer Created", newTimer: newTimer });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// });
+
 router.post("/newTimer", validateSession, async (req, res) => {
-  try { 
-    if (!token) {
-    return res.status(401).json({ error: "No token provided" });
-  }
-    const { SessionTitle, Break, MoodScale, } =
-      req.body;
+  try {
+    //handled in middleware
+
+    const { SessionTitle, Break, MoodScale } = req.body;
 
     const newTimer = new Timer({
-      SessionTitle: SessionTitle,
+      SessionTitle: "SessionTitle", //has to have name dynamics
       Break: Break,
       MoodScale: MoodScale,
-    
+      userId: req.user.id,
     });
 
     await newTimer.save();
@@ -34,6 +54,7 @@ router.post("/newTimer", validateSession, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 //GET TIMER
 //Endpoint: localhost:3000/api/timer/getTimer
