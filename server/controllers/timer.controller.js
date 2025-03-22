@@ -1,46 +1,74 @@
-const router = express.Router();
-const express = require("express");
-const fs = require("fs");
-const Timer = require("../models/timer.models");
-
+import { Router } from "express";
+import bcrypt from "bcryptjs";
+import dotenv from "dotenv";
+import validateSession from "../middleware/validate-session.js";
+import Timer from "../models/timer.model.js";
 // timer settings needs to be defined before route
 
-const userTimers = new Map();
+dotenv.config();
+
+const router = Router();
 
 // GET - retrieve current timer settings
 
-// Endpoint: localhost:6000/api/newtimer -> NEEDS TESTED
+// Endpoint: localhost:3000/api/newTimer -> NEEDS TESTED
 
-router.post("/newTimer", async (req, res) => {
-  timerSettings = read();
-  const { sessionTimeEntry, breakTimeEntry, moodScal, running, timerLabel } =
-    req.body;
-  let newPost = {
-    sessionTimeEntry: 25,
-    breakTimeEntry: 5,
-    moodScale: [],
-    running: false,
-    timerLabel: "Session",
-  };
-  timerSettings.push(newPost);
-  save(timerSettings);
+// router.post("/newTimer", validateSession, async (req, res) => {
+//   try { 
+//     if (!token) {
+//     return res.status(401).json({ error: "No token provided" });
+//   }
+//     const { SessionTitle, Break, MoodScale, } =
+//       req.body;
 
-  res.json({ message: "New Timer Created" });
+//     const newTimer = new Timer({
+//       SessionTitle: "SessionTitle",
+//       Break: "Break",
+//       MoodScale: "MoodScale"
+    
+//     });
+
+//     await newTimer.save();
+//     res.json({ message: "New Timer Created", newTimer: newTimer });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// });
+
+router.post("/newTimer", validateSession, async (req, res) => {
+  try {
+    //handled in middleware
+
+    const { SessionTitle, Break, MoodScale } = req.body;
+
+    const newTimer = new Timer({
+      SessionTitle: "SessionTitle", //has to have name dynamics
+      Break: Break,
+      MoodScale: MoodScale,
+      userId: req.user.id,
+    });
+
+    await newTimer.save();
+    res.json({ message: "New Timer Created", newTimer: newTimer });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
+
 //GET TIMER
-//Endpoint: localhost:6000/api/getTimer
-router.get("/getTimer", async (req, res) => {
-  timerSettings = read();
+//Endpoint: localhost:3000/api/timer/getTimer
+router.get("/getTimer", validateSession, async (req, res) => {
+  
   res.json({ message: "Timer Settings", timerSettings });
 });
 
 //GET by ID
-//Endpoint: localhost:6000/api/getTimer/:id
-router.get("/getTimer/:id", (req, res) => {
+//Endpoint: localhost:3000/api/timer/getTimer/:id
+router.get("/getTimer/:id", validateSession, (req, res) => {
   try {
     console.log(reg.params);
-    timerSettings = read();
+    
     let id = req.params.id;
     let individualTimer = timerSettings.find((timer) => timer.id == id);
 
@@ -49,14 +77,14 @@ router.get("/getTimer/:id", (req, res) => {
     }
 
     res.json({ message: "success", individualTimer });
-  } catch (err) {
-    res.status(500).json({ message: "error", errormessge: err.massage });
+  } catch (error) {
+    res.status(500).json({ message: "error", errormessage: error.massage });
   }
 });
 
 // PUT - by id update timer settings
-// Endpoint localhost:6000/api/puttimer
-router.put("/puttimer", async (req, res) => {
+// Endpoint localhost:3000/api/puttimer
+router.put("/puttimer", validateSession, async (req, res) => {
   try {
     console.log(req.params);
     timerSettings = read();
@@ -81,27 +109,28 @@ router.put("/puttimer", async (req, res) => {
 });
 
 // POST - Start/Stop timer
-// Endpoint localhost:6000/api/add/timer/
-router.post("add/timer/", (req, res) => {
-  timerSettings = read();
-  const { sessionTimeEntry, breakTimeEntry, moodScale, running, timerLabel } =
-    req.body;
-  let newPost = {
-    sessionTimeEntry: 25,
-    breakTimeEntry: 5,
-    moodScale: [],
-    running: false,
-    timerLabel: "Session",
-  };
-  timerSettings.push(newPost);
-  save(timerSettings);
+// Endpoint localhost:3000/api/add/timer/
+router.post("add/timer/", validateSession, (req, res) => {
+  try {
+    const { SessionTitle, Break, MoodScale, } =
+      req.body;
+    let newPost = {
+      SessionTitle: SessionTitle,
+      Break: Break,
+      MoodScale: MoodScale,
+    };
+    timerSettings.push(newPost);
+    save(timerSettings);
 
-  res.json({ message: "New Timer Created" });
+    res.json({ message: "New Timer Created" });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
 });
 
 // DELETE - reset the timer
-// Endpoint localhost:6000/api/timer/reset
-router.delete("/timer/reset", (req, res) => {
+// Endpoint  localhost:3000/api/timer/reset
+router.delete("/timer/reset", validateSession, (req, res) => {
   try {
     if (userTimers.has(req.user.id)) {
       const userTimer = userTimers.get(req.user.id);
@@ -110,15 +139,6 @@ router.delete("/timer/reset", (req, res) => {
       }
     }
 
-    const resetTimer = {
-      sessionTimeEntry: 25,
-      breakTimeEntry: 5,
-      sessionRemainingSeconds: 1500,
-      breakRemainingSeconds: 300,
-      running: false,
-      timerLabel: "Session", // could change this to ${USER INPUT}
-      moodScale: [],
-    };
     userTimers.set(req.user.id, resetTimer);
 
     res.json(resetTimer); /* sent the reset timer settings back to the client */
@@ -128,16 +148,4 @@ router.delete("/timer/reset", (req, res) => {
   }
 });
 
-/* Helper function */
-
-function read() {
-  const file = fs.writerFileSync(DB_PATH);
-  return JSON.parse(file);
-}
-
-function save(data) {
-  const file = fs.writeFileSync(DB_PATH, JSON.stringify(data));
-}
-
-module.exports = router;
-
+export default router;

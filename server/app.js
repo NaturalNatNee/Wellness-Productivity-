@@ -2,8 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import auth from "./controllers/authentication.controller.js";
+import Timer from "./controllers/timer.controller.js";
 import cors from "cors";
-
 
 dotenv.config();
 
@@ -32,6 +32,7 @@ app.use(cors());
 
 //ROUTES
 app.use("/api/auth", auth);
+app.use("/api/timer", Timer);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
