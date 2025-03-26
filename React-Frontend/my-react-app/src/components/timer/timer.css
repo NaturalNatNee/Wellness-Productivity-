@@ -78,3 +78,9 @@ body {
   button:hover:not(:disabled) {
     background-color: #0056b3;
   }
+
+  #Dark-Mode{
+    position: fixed; /* Position the button relative to the parent container */
+    top: 20px; /* Distance from the top */
+    width: auto; /* Allow the width to adjust based on content */
+  }

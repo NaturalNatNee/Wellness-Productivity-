@@ -4,17 +4,42 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
 import Login from "./components/authentication/Login";
 import Signup from "./components/authentication/Signup";
 import Dashboard from "./components/Dashboard.jsx";
 import ProtectedRoute from "./components/authentication/ProtectedRoutes"; 
 import TrackingTable from "./components/TrackingTable/TrackingTable.jsx"
-
 import Timer from "./components/timer/Timer";
 
 function App() {
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+      const savedTheme = localStorage.getItem('theme');
+      return savedTheme === 'dark';
+    });
 
-  return (
+    useEffect(() => {
+      if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        //loc
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+      }
+    }, [isDarkMode]);
+
+    const toggleDarkMode = () => {
+      setIsDarkMode((prevMode) => !prevMode);
+    };
+
+     return (
+      <div>
+      <div id="Dark-Mode"> 
+        <button onClick={toggleDarkMode}>
+          DarkMode
+        </button>
+      </div>
     <Router>
      
       <Routes>
@@ -34,6 +59,7 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
+    </div>
   );
 }
 
