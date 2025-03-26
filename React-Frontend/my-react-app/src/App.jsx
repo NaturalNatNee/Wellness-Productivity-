@@ -10,7 +10,6 @@ import Dashboard from "./components/Dashboard.jsx";
 import ProtectedRoute from "./components/authentication/ProtectedRoutes"; 
 import TrackingTable from "./components/TrackingTable/TrackingTable.jsx"
 import Timer from "./components/timer/Timer";
-import DarkMode from "./components/DarkMode";
 
 
 function App() {
