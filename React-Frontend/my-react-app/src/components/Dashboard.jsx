@@ -42,12 +42,11 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <button className="logout-btn" onClick={handleLogout}>
-          Logout
-        </button>
+        Logout
+      </button>
       <header className="dashboard-header">
-        
-        <h1>Dashboard</h1>
-        
+        <h1>ZenYourMess!</h1>
+        <h2>Where Coders Compile Dreams and Execute Naps!</h2>
       </header>
 
       <div className="user-welcome">
@@ -71,8 +70,6 @@ function Dashboard() {
             View Stats
           </button>
         </div>
-
-      
       </div>
     </div>
   );
