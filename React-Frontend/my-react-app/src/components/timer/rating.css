@@ -3,45 +3,45 @@
   justify-content: center;
   align-items: center;
   margin-top: 20px;
-  background-color: #f0f0f0;
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff; /* Changed to pure white for better contrast */
+  padding: 15px; /* Increased padding for better spacing */
+  border-radius: 12px; /* Slightly more rounded corners */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Darkened shadow for better visibility */
 }
 
 .rating-box {
-  width: 50px;
-  height: 50px;
+  width: 60px; /* Increased size for better visibility */
+  height: 60px; /* Increased size for better visibility */
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid #007bff;
-  border-radius: 8px;
-  margin: 0 8px;
+  border: 3px solid #0056b3; /* Darker border for better contrast */
+  border-radius: 10px; /* Slightly more rounded corners */
+  margin: 0 10px; /* Increased margin for better spacing */
   cursor: pointer;
-  font-size: 18px;
+  font-size: 20px; /* Increased font size for better readability */
   font-weight: bold;
-  color: #007bff;
-  background-color: #ffffff;
+  color: #0056b3; /* Darker text color for better visibility */
+  background-color: #f9f9f9; /* Slightly darker background for better contrast */
   transition: background-color 0.3s, color 0.3s, transform 0.2s;
 }
 
 .rating-box:hover {
-  background-color: #e6f7ff;
-  color: #0056b3;
-  transform: scale(1.1);
+  background-color: #cce4ff; /* Darker hover background for better visibility */
+  color: #003d80; /* Darker hover text color for better contrast */
+  transform: scale(1.15); /* Slightly larger scale for better emphasis */
 }
 
 .rating-box.selected {
-  background-color: #007bff;
-  color: #ffffff;
-  border-color: #0056b3;
+  background-color: #0056b3; /* Darker selected background for better contrast */
+  color: #ffffff; /* White text for better contrast */
+  border-color: #003d80; /* Darker border for better visibility */
 }
 
 .rating-section h3 {
   text-align: center;
-  font-size: 24px;
+  font-size: 26px; /* Slightly larger font size */
   font-weight: bold;
-  color: #333333;
-  margin-bottom: 15px;
+  color: #222222; /* Darker text color for better visibility */
+  margin-bottom: 20px; /* Increased margin for better spacing */
 }

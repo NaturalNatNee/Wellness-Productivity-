@@ -31,6 +31,9 @@ body {
   justify-content: center;
   align-items: center;
 }
+.dashboard-header{
+  color: #006400;
+}
 
 .dashboard {
   background-color: var(--base-color);
