@@ -11,6 +11,7 @@ import Dashboard from "./components/Dashboard.jsx";
 import ProtectedRoute from "./components/authentication/ProtectedRoutes"; 
 import TrackingTable from "./components/TrackingTable/TrackingTable.jsx"
 import Timer from "./components/timer/Timer";
+import TrackingGraph from "./components/TrackingGraphs/TrackingGraph.jsx";
 
 
 function App() {
@@ -63,7 +64,7 @@ function App() {
              {/* Protected routes */}
              <Route element={<ProtectedRoute />}>
                <Route path="/timer" element={<Timer />} />
-               <Route path="/progress" element={<TrackingTable />} />
+               <Route path="/progress" element={<TrackingGraph />} />
                <Route path="/dashboard" element={<Dashboard />} />
                {/* Add other protected routes here */}
              </Route>

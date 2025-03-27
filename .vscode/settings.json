@@ -1,3 +1,4 @@
 {
-    "livePreview.defaultPreviewPath": "/React-Frontend/my-react-app/signup.html"
+    "livePreview.defaultPreviewPath": "/React-Frontend/my-react-app/signup.html",
+    "postman.settings.dotenv-detection-notification-visibility": false
 }
