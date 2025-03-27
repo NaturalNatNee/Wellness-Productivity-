@@ -1,0 +1,150 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Poppins, Segoe UI, sans-serif;
+  font-size: 14pt; 
+  color: var(--text-color);
+  text-align: center;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #f0f0f0; 
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dashboard-header{
+  color: #006400;
+}
+
+.dashboard {
+  background-color: var(--base-color);
+  height: 100vh;
+  width: 100vw;
+  padding: 30px; 
+  border-radius: 20px;
+  box-shadow: 0 6px 15px var(--shadow-color); 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard h1 {
+  font-size: 3rem; 
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 30px; 
+  color: var(--accent-color); 
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px; 
+  width: 100%;
+  max-width: 500px; 
+}
+
+.logout-btn {
+  height: 140px; 
+  background-color: var(--tile-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem; 
+  font-weight: 600;
+  color: var(--text-color); 
+  border-radius: 15px;
+  box-shadow: 0 4px 10px var(--shadow-color); 
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: var(--hover-color);
+  transform: scale(1.05); 
+}
+
+.dashboard-box {
+  height: 140px; 
+  background-color: var(--tile-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem; 
+  font-weight: 600;
+  color: var(--text-color); 
+  border-radius: 15px;
+  box-shadow: 0 4px 10px var(--shadow-color); 
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.dashboard-box h3 {
+  margin-bottom: 10px;
+  font-size: 1.4rem; 
+  color: var(--accent-color); 
+}
+
+.dashboard-box:hover {
+  background-color: var(--hover-color);
+  transform: scale(1.05); 
+}
+
+
+@media (max-width: 768px) {
+  .dashboard {
+    width: 100vw;
+    border-radius: 10px; 
+    padding: 20px; 
+  }
+
+  .dashboard h1 {
+    font-size: 2.5rem; 
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr; 
+    gap: 15px;
+  }
+
+  .logout-btn {
+    position: absolute; /* Position the button relative to the parent container */
+    top: 20px; /* Distance from the top */
+    right: 20px; /* Distance from the right */
+    height: 50px; /* Adjusted height for a smaller button */
+    width: auto; /* Allow the width to adjust based on content */
+    padding: 10px 20px; /* Add padding for better appearance */
+    background-color: var(--tile-bg);
+    color: var(--text-color);
+    font-size: 1rem; /* Adjusted font size */
+    font-weight: 600;
+    border-radius: 5px; /* Slightly rounded corners */
+    box-shadow: 0 4px 10px var(--shadow-color);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer; /* Add a pointer cursor for better UX */
+  }
+  
+  .logout-btn:hover {
+    background-color: var(--hover-color);
+    transform: scale(1.05);
+  }
+  
+  .dashboard {
+    position: relative; /* Ensure the logout button is positioned relative to the dashboard */
+  }
+}
+
+#Dark-Mode{
+    position: fixed; /* Position the button relative to the parent container */
+    top: 20px; /* Distance from the top */
+    width: auto; /* Allow the width to adjust based on content */
+  }

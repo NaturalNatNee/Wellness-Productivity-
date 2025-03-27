@@ -225,10 +225,7 @@ function Timer() {
             </option>
           ))}
         </select>
-        <button onClick={() => setCountUp(!countUp)}>
-          {countUp ? "Count Down" : "Count Up"}{" "}
-          {/* Toggle between count up and count down */}
-        </button>
+       
       </div>
       {sessionCompleted && (
         <div className="rating-section">

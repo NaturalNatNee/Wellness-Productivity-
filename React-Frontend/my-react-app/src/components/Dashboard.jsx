@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/authService";
 import "./Dashboard.css"; // Create this file for styling
+import Timer from "./timer/Timer";
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -40,43 +41,33 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
+      <button className="logout-btn" onClick={handleLogout}>
+        Logout
+      </button>
       <header className="dashboard-header">
-        <h1>Wellness & Productivity Dashboard</h1>
-        <button className="logout-btn" onClick={handleLogout}>
-          Logout
-        </button>
+        <h1>ZenYourMess!</h1>
+        <h2>Where Coders Compile Dreams and Execute Naps!</h2>
       </header>
 
       <div className="user-welcome">
-        <h2>Welcome, {user?.firstName || "User"}!</h2>
-        <p>Track your productivity and wellness journey here.</p>
+        <h2>Welcome, {user?.firstName}!</h2>
+        <p>Productivity and Wellness Tracking</p>
       </div>
 
       <div className="dashboard-grid">
-        <div className="dashboard-card">
+        <div className="dashboard-box">
           <h3>Start a Timer Session</h3>
-          <p>Focus on your work with customizable timer sessions.</p>
+          <p>Timer</p>
           <button className="primary-btn" onClick={() => navigate("/timer")}>
             Start Timer
           </button>
         </div>
 
-        <div className="dashboard-card">
-          <h3>View Progress</h3>
-          <p>See insights from your productivity and wellness data.</p>
+        <div className="dashboard-box">
+          <h3>Insights</h3>
+          <p></p>
           <button className="primary-btn" onClick={() => navigate("/progress")}>
             View Stats
-          </button>
-        </div>
-
-        <div className="dashboard-card">
-          <h3>Account Settings</h3>
-          <p>Update your profile and preferences.</p>
-          <button
-            className="secondary-btn"
-            onClick={() => navigate("/profile")}
-          >
-            Profile Settings
           </button>
         </div>
       </div>
