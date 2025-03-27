@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-:root{
-  --accent-color: #29812f;
+:root {
+  --background-color: #f5f5f5;
   --base-color: white;
-  --text-color: #2E2B41;
-  --input-color: #F3F0FF;
+  --text-color: #333;
+  --accent-color: #4a90e2;
+  --input-color: rgba(0, 0, 0, 0.05);
 }
+
 *{
   margin: 0;
   padding: 0;
@@ -16,6 +18,8 @@ html{
   text-align: center;
 }
 body{
+    background-color: var(--background-color);
+  color: var(--text-color);
   min-height: 100vh;
   background-image: url(background.jpg);
   background-size: cover;
@@ -24,7 +28,8 @@ body{
 }
 .wrapper{
   box-sizing: border-box;
-  background-color: var(--base-color);
+   background-color: var(--base-color);
+  color: var(--text-color);
   height: 100vh;
   width: max(40%, 600px);
   padding: 10px;
@@ -68,6 +73,7 @@ form label{
   font-weight: 500;
 }
 form input{
+  color: var(--text-color);
   box-sizing: border-box;
   flex-grow: 1;
   min-width: 0;
@@ -99,6 +105,7 @@ form button{
   border-radius: 1000px;
   padding: .85em 4em;
   background-color: var(--accent-color);
+  color: var(--base-color);
   color: var(--base-color);
   font: inherit;
   font-weight: 600;
@@ -135,3 +142,4 @@ form div.incorrect input{
 #error-message{
   color:#f06272;
 }
+

@@ -1,15 +1,5 @@
 /* Import Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap');
-
-:root {
-  --accent-color: #006400; 
-  --base-color: #ffffff;
-  --text-color: #000000;
-  --tile-bg: #d6e4ff; 
-  --hover-color: #b3c7ff; 
-  --shadow-color: rgba(0, 0, 0, 0.25); 
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -152,3 +142,9 @@ body {
     position: relative; /* Ensure the logout button is positioned relative to the dashboard */
   }
 }
+
+#Dark-Mode{
+    position: fixed; /* Position the button relative to the parent container */
+    top: 20px; /* Distance from the top */
+    width: auto; /* Allow the width to adjust based on content */
+  }
