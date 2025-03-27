@@ -1,28 +1,45 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import User from "../models/user-model.js";
 
-const validateSession = async (req, res, next) => {
-    try {
-        // ! 1. extract the token from the headers
-        const token = req.headers.authorization;
-        // console.log("token" , token);
-        // ! 2. verify and decode the token
-        const decodedToken = jwt.verify(token , process.env.JWT_SECRET)
-        // console.log("decodedToken", decodedToken);
+dotenv.config();
 
-        // ! 3. check the database to see if the user is active
-        const user = await User.findById(decodedToken.id);
+const JWT_SECRET = process.env.JWT_SECRET;
 
-        if(!user) {
-            throw new Error("user not found")
-        }
-        req.user = user;
+const validateSession = (req, res, next) => {
+  /* console.log(" Middleware: validateSession triggered"); */
 
-        return next();
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
+  const authHeader = req.headers["authorization"];
+  /* console.log(" Auth Header:", authHeader); */
+
+  if (!authHeader) {
+    /* console.log(" No Authorization header found."); */
+    return res.status(401).json({ error: "Access denied. No token provided." });
+  }
+
+  const parts = authHeader.split(" ");
+  if (parts.length === 2 && parts[0] === "Bearer") {
+    var token = parts[1];
+  } else {
+    /* console.log(" Invalid Authorization header format."); */
+    return res
+      .status(401)
+      .json({
+        error: "Invalid Authorization header format. Expected 'Bearer <token>'",
+      });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    /* console.log(" Token verified. Decoded:", decoded); */
+
+    req.user = decoded.user || decoded; // Handle both token formats
+    console.log("🔹 req.user set to:", req.user);
+
+    next();
+  } catch (error) {
+    console.log(" Invalid token:", error.message);
+    return res.status(401).json({ error: "Invalid token" });
+  }
+};
 
 export default validateSession;

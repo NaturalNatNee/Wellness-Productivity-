@@ -9,10 +9,6 @@ dotenv.config();
 
 const app = express();
 
-
-
-
-
 const PORT = process.env.PORT || 3000; // changed 5000 to 3000
 
 mongoose
