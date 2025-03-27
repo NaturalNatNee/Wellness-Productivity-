@@ -34,33 +34,45 @@ function App() {
     };
 
      return (
-      <div>
-      <div id="Dark-Mode"> 
-        <button onClick={toggleDarkMode}>
-          DarkMode
-        </button>
-      </div>
-    <Router>
-     
-      <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+       <div>
+         <div id="Dark-Mode">
+           <button
+             onClick={toggleDarkMode}
+             style={{
+               borderRadius: "1000px",
+               backgroundColor: "var(--accent-color)",
+               color: "var(--base-color)",
+               font: "inherit",
+               fontWeight: "600",
+               textTransform: "uppercase",
+               cursor: "pointer",
+               transition: "150ms ease",
+               marginLeft: "10px"
+             }}
+           >
+             DARK/LIGHT
+           </button>
+         </div>
+         <Router>
+           <Routes>
+             {/* Public routes */}
+             <Route path="/login" element={<Login />} />
+             <Route path="/signup" element={<Signup />} />
 
-        {/* Protected routes */}
-        <Route element={<ProtectedRoute />}>
-        <Route path="/timer" element={<Timer />} />
-        <Route path="/progress" element={<TrackingTable />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          {/* Add other protected routes here */}
-        </Route>
+             {/* Protected routes */}
+             <Route element={<ProtectedRoute />}>
+               <Route path="/timer" element={<Timer />} />
+               <Route path="/progress" element={<TrackingTable />} />
+               <Route path="/dashboard" element={<Dashboard />} />
+               {/* Add other protected routes here */}
+             </Route>
 
-        {/* Redirect root to login page */}
-        <Route path="/" element={<Navigate to="/login" />} />
-      </Routes>
-    </Router>
-    </div>
-  );
+             {/* Redirect root to login page */}
+             <Route path="/" element={<Navigate to="/login" />} />
+           </Routes>
+         </Router>
+       </div>
+     );
 }
 
 export default App;

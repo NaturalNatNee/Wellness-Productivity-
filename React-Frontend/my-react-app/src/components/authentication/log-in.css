@@ -1,4 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+:root {
+  --background-color: #f5f5f5;
+  --base-color: white;
+  --text-color: #333;
+  --accent-color: #4a90e2;
+  --input-color: rgba(0, 0, 0, 0.05);
+}
+
 *{
   margin: 0;
   padding: 0;
@@ -96,7 +104,7 @@ form button{
   border: none;
   border-radius: 1000px;
   padding: .85em 4em;
-    background-color: var(--accent-color);
+  background-color: var(--accent-color);
   color: var(--base-color);
   color: var(--base-color);
   font: inherit;
@@ -135,8 +143,3 @@ form div.incorrect input{
   color:#f06272;
 }
 
-#Dark-Mode{
-    position: fixed; /* Position the button relative to the parent container */
-    top: 20px; /* Distance from the top */
-    width: auto; /* Allow the width to adjust based on content */
-  }
