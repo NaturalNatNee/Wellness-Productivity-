@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Rating from "./Rating";
 import "./timer.css";
-import { get } from "express/lib/response";
+//import { get } from "express/lib/response";
 
 function Timer() {
   // State variables to manage the timer and user interactions
