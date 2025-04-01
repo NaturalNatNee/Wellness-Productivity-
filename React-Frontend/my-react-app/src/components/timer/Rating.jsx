@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./rating.css";
-import EmojiConvertor from "emoji-js";// This works, but not in use
+import EmojiConvertor from "emoji-js"; // This works, but not in use
 
 const Rating = ({ onRate }) => {
   // State variable to track the currently selected rating

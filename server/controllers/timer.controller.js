@@ -1,8 +1,8 @@
 import { Router } from "express";
-import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import validateSession from "../middleware/validate-session.js";
 import Timer from "../models/timer.model.js";
+
 // timer settings needs to be defined before route
 
 dotenv.config();
@@ -29,6 +29,40 @@ router.post("/newTimer", validateSession, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+//   http://localhost:3000/api/timer/newRating
+router.post("/newRating", validateSession, async (req, res) => {
+  try {
+    const { newRating } = req.body;
+    const Rating = new Timer({
+      newRating: newRating,
+      userId: req.user.id,
+    });
+
+    await Rating.save();
+    res.json({ userId: req.user._id, message: "New Rating Created", Rating });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// * View all Rating in a timer
+//http://localhost:3000/api/timer/viewRating
+
+router.get("/viewRating", validateSession, async (req, res) => {
+  try {
+    const Ratings = await Timer.find();
+
+    res.json({
+      message: "success from get",
+      Ratings: Ratings,
+      userId: req.user._id,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
 
 //GET TIMER
 //Endpoint: localhost:3000/api/timer/getTimer
@@ -41,6 +75,5 @@ router.get("/getTimer", validateSession, async (req, res) => {
     res.status(500).json({ message: "error" });
   }
 });
-
 
 export default router;
