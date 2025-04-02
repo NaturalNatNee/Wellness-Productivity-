@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-//import axios from "axios";
+
 import Rating from "./Rating";
 import "./timer.css";
-//import { get } from "express/lib/response";
 
 function Timer() {
   // State variables to manage the timer and user interactions
@@ -18,28 +17,6 @@ function Timer() {
   const [selectedPreset, setSelectedPreset] = useState(null); // Tracks the currently selected preset
   const [sessionCompleted, setSessionCompleted] = useState(false); // Tracks whether the session has been completed
   const [userRating, setUserRating] = useState(null); // Stores the user's rating for the session
-
-//   const sendapi = async () => {
-//     try {
-//      const res = await axios.post("http://localhost:3000/api/newTimer");
-//       res.time;
-//       console.log(time);
-//     } catch (error) {
-//       console.error(error);
-//     } throw error;
-//   };
-
-//   const getapi = async () => {
-//     try {
-//       const res = await axios.get("http://localhost:3000/api/getTimer");
-//       console.log(res);
-//     } catch (error) {
-//       console.error(error);
-
-//  }};
-
-// getapi();
-
 
   // Function to calculate the duration of each session segment
   // This divides the total session time evenly based on the number of breaks
@@ -184,17 +161,20 @@ function Timer() {
         </h3>
       </div>
       <div className="timer-container">
+
         <input
           className="time"
           type="number"
           placeholder="hour"
           onChange={(e) => setHours(Number(e.target.value))} // Update the hours state when the user inputs a value
           disabled={isTimeAvailable} // Disable the input if the timer is running
+
         />
         <input
           className="time"
           type="number"
           placeholder="minutes"
+
           onChange={(e) => setMinutes(Number(e.target.value))} // Update the minutes state when the user inputs a value
           disabled={isTimeAvailable} // Disable the input if the timer is running
         />
@@ -204,10 +184,12 @@ function Timer() {
           placeholder="break minutes"
           onChange={(e) => setBreakMinutes(Number(e.target.value))} // Update the break duration when the user inputs a value
           disabled={isTimeAvailable} // Disable the input if the timer is running
+
         />
         <input
           className="time"
           type="number"
+
           placeholder="break count"
           onChange={(e) => setBreakCount(Number(e.target.value))} // Update the number of breaks when the user inputs a value
           disabled={isTimeAvailable} // Disable the input if the timer is running
@@ -243,16 +225,17 @@ function Timer() {
             </option>
           ))}
         </select>
+       
       </div>
       {sessionCompleted && (
         <div className="rating-section">
-          <div> {() => sendapi()} </div>
           <h3>Rate Your Session</h3>
           <Rating onRate={(rating) => setUserRating(rating)} />{" "}
           {/* Allow the user to rate the session */}
         </div>
       )}
     </div>
+
   );
 }
 
