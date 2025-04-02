@@ -13,6 +13,9 @@ const instance = axios.create({
   },
 });
 
+
+
+
 const TrackingTable = () => {
   const [timerData, setTimerData] = useState([]);
   const [filteredTimers, setFilteredTimers] = useState([]);
@@ -24,10 +27,10 @@ const TrackingTable = () => {
     const fetchTimerData = async () => {
       try {
         setLoading(true);
-        const response = await instance.get("/getTimer");
+        const response = await instance.get("/viewRating");
         console.log("Raw data from API:", response);
-
-        const formattedData = response.data.Rating.map((timer) => {
+        const timers = response.data.Rating || response.data || [];
+        const formattedData = timers.data.Rating.map((timer) => {
           let formattedDate = "Unknown date";
           try {
             if (timer.createdAt) {
@@ -42,7 +45,7 @@ const TrackingTable = () => {
 
           return {
             id: timer._id || Math.random().toString(),
-            rating: timer.rating || 0,
+            rating: timer.newRating || 0,
             date: formattedDate,
           };
         });
