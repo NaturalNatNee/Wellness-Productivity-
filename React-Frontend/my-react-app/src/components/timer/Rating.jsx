@@ -3,8 +3,9 @@ import "./rating.css";
 import EmojiConvertor from "emoji-js"; // This works, but not in use
 import axios from "axios";
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdkYzk1OWVmZWFhNTFmZTk2MzIwOWVlIiwiZmlyc3ROYW1lIjoicm9iZW51cyIsImxhc3ROYW1lIjoiZ3V0ZXR0YSIsImVtYWlsIjoiZ0BoaW0ueWVzIn0sImlhdCI6MTc0MzU0NTQ3MiwiZXhwIjoxNzQzNTg4NjcyfQ.eZsTOLh-tVBoGXv9KmYjEMpoH2j1vN1Zhwoo2VZt-JY"
+//import validateSession from "../../../../../server/middleware/validate-session.js";
 
+const token = localStorage.getItem("token");
 const instance = axios.create({
   baseURL: 'http://localhost:3000/api/timer', // Replace this with your API's base URL
   headers: {
@@ -26,34 +27,56 @@ const Rating = ({ onRate }) => {
 
   // Define the smile emoji
   //const smile = `${emoji.replace_colons(":smiley:")} happy`;
-const codedRating = {
-  "userId":"67dc959efeaa51fe963209ee",
-  "newRating":`${selectedRating}`
-}
-  // Function to handle when a user clicks on a rating
-  const handleRatingClick = (rating) => {
-    setSelectedRating(rating); // Update the state with the selected rating
-    if (onRate) {
-      onRate(rating); // If an `onRate` function is provided, call it with the selected rating
-      
 
-      instance.post("/newRating", validateSession, async (req, res) => {
-        try {
-          const { newRating } = req.codedRating;
-          const Rating = new Timer({
-            newRating: newRating,
-            userId: req.user.id,
-          });
+  // Function to handle when a user clicks on a rating
+
+
+//   const handleRatingClick = async (rating) => {
+//     setSelectedRating(rating); // Update the state with the selected rating
+//     if (onRate) {
+//       onRate(rating); // If an `onRate` function is provided, call it with the selected rating
       
-          await Rating.save();
-          res.json({ userId: req.user._id, message: "New Rating Created", Rating });
-        } catch (error) {
-          res.status(500).json({ message: error.message });
-        }
-      });
+//       try {
+
+//       await instance.post("/newRating",  (req, res) => {
+//           const codedRating = {
+
+//   "newRating":`${selectedRating}`
+// }
+//           const { newRating } = req.codedRating;
+//           const Rating = new Timer({
+//             newRating: rating,
+//            // userId: req.user.id,
+//           });
       
-    }
-  };
+//           await Rating.save();
+//           res.json({  message: "New Rating Created", Rating });
+//         } catch (error) {
+//           res.status(500).json({ message: error.message });
+//         }
+//       });
+      
+//     }
+//   };
+
+
+
+
+
+const handleRatingClick = async (rating) => {
+  setSelectedRating(rating); // Update the state with the selected rating
+
+  if (onRate) {
+      onRate(rating); // Call the provided callback with the rating
+  }
+
+  try {
+      await instance.post("/newRating", { newRating: rating }); // Send the selected rating directly
+      console.log("Rating submitted successfully");
+  } catch (error) {
+      console.error("Error submitting rating:", error);
+  }
+};
 
   // Render the rating component
   return (

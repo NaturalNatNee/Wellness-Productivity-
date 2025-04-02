@@ -1,48 +1,83 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, Eye } from "lucide-react";
-import "./TrackingTable.css"; // Import the CSS file
-import EmojiConvertor from "emoji-js"
+import axios from "axios";
+import "./TrackingTable.css";
 
-const orderData = [
-  { id: "Coding", user: "", total: 2.4, status: "Happy", date: "2023-07-01" },
-  { id: "Coding", user: "", total: 4.0, status: "Processing", date: "2023-07-02" },
-  { id: "Coding", user: "", total: 1.5, status: "Shipped", date: "2023-07-03" },
-  { id: "Coding", user: "", total: 5.2, status: "Pending", date: "2023-07-04" },
-  { id: "Coding", user: "", total: 5.8, status: "Happy", date: "2023-07-05" },
-  { id: "Coding", user: "", total: 3.75, status: "Processing", date: "2023-07-06" },
-  { id: "Coding", user: "", total: 5.9, status: "Shipped", date: "2023-07-07" },
-  { id: "Coding", user: "", total: 1.6, status: "Happy", date: "2023-07-08" },
-];
+const token = localStorage.getItem("token");
 
-const emoji = new EmojiConvertor();
-emoji.init_env(); // Initialize emoji-js environment
-
+const instance = axios.create({
+  baseURL: "http://localhost:3000/api/timer",
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  },
+});
 
 const TrackingTable = () => {
+  const [timerData, setTimerData] = useState([]);
+  const [filteredTimers, setFilteredTimers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredOrders, setFilteredOrders] = useState(orderData);
+
+  useEffect(() => {
+    const fetchTimerData = async () => {
+      try {
+        setLoading(true);
+        const response = await instance.get("/getTimer");
+        console.log("Raw data from API:", response);
+
+        const formattedData = response.data.Rating.map((timer) => {
+          let formattedDate = "Unknown date";
+          try {
+            if (timer.createdAt) {
+              const date = new Date(timer.createdAt);
+              if (!isNaN(date.getTime())) {
+                formattedDate = date.toISOString().split("T")[0];
+              }
+            }
+          } catch (err) {
+            console.warn("Error formatting date for timer:", timer._id, err);
+          }
+
+          return {
+            id: timer._id || Math.random().toString(),
+            rating: timer.rating || 0,
+            date: formattedDate,
+          };
+        });
+
+        console.log("Formatted data:", formattedData);
+        setTimerData(formattedData);
+        setFilteredTimers(formattedData);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching timer data:", err);
+        setError(err.response?.data?.message || err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchTimerData();
+  }, []);
 
   const handleSearch = (e) => {
-    const term = e.target.value.toLowerCase();
-    setSearchTerm(term);
-    const filtered = orderData.filter(
-      (order) => order.id.toLowerCase().includes(term) || order.customer.toLowerCase().includes(term)
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+    const filtered = timerData.filter((timer) =>
+      timer.date.toLowerCase().includes(value)
     );
-    setFilteredOrders(filtered);
+    setFilteredTimers(filtered);
   };
 
-  const getStatusClassName = (status) => {
-    switch (status) {
-      case "Happy":
-        return `${emoji.replace_colons(":smiley:")} happy`;
-      case "Nuetral":
-        return `${emoji.replace_colons(":nerd_face:")} nerd`;
-      case "Shipped":
-        return `${emoji.replace_colons(":face_with_rolling_eyes:")} status-shipped`;
-      default:
-        return `${emoji.replace_colons(":thinking_face:")} status-pending`;
-    }
+  const getRatingClass = (rating) => {
+    if (rating >= 4) return "high-rating";
+    if (rating >= 2) return "medium-rating";
+    return "low-rating";
+  };
+
+  const getRatingDisplay = (rating) => {
+    return `${rating}/5`;
   };
 
   return (
@@ -62,53 +97,54 @@ const TrackingTable = () => {
             value={searchTerm}
             onChange={handleSearch}
           />
-          <Search className="search-icon" size={18} />
         </div>
       </div>
-
       <div className="table-container">
-        <table className="tracking-table">
-          <thead>
-            <tr>
-              <th>Session</th>
-              <th>User</th>
-              <th>Study Time</th>
-              <th>MoodTracker</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {filteredOrders.map((order) => (
-              <motion.tr
-                key={order.id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <td className="order-id">{order.id}</td>
-                <td className="customer-name">{order.customer}</td>
-                <td className="order-total">{order.total.toFixed(2)} hrs </td>
-                <td className="order-status">
-                  <span
-                    className={`status-badge ${getStatusClassName(
-                      order.status
-                    )}`}dangerouslySetInnerHTML={{
-                      __html: getStatusClassName(order.status),
-                    }}
-                  />
-                </td>
-                <td className="order-date">{order.date}</td>
-                <td className="order-actions">
-                  <button className="view-button">
-                    <Eye size={18} />
-                  </button>
-                </td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </table>
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p className="error-message">{error}</p>
+        ) : (
+          <table className="tracking-table">
+            <thead>
+              <tr>
+                <th>Rating</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTimers.length > 0 ? (
+                filteredTimers.map((timer) => (
+                  <motion.tr
+                    key={timer.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <td className="session-rating">
+                      <span
+                        className={`rating-badge ${getRatingClass(
+                          timer.rating
+                        )}`}
+                      >
+                        {getRatingDisplay(timer.rating)}
+                      </span>
+                    </td>
+                    <td className="session-date">{timer.date}</td>
+                    <td className="session-actions">View</td>
+                  </motion.tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" className="no-data">
+                    No sessions found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        )}
       </div>
     </motion.div>
   );

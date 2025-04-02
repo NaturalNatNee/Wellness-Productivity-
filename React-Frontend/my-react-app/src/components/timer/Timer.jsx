@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+//import axios from "axios";
 import Rating from "./Rating";
 import "./timer.css";
 //import { get } from "express/lib/response";
@@ -19,26 +19,26 @@ function Timer() {
   const [sessionCompleted, setSessionCompleted] = useState(false); // Tracks whether the session has been completed
   const [userRating, setUserRating] = useState(null); // Stores the user's rating for the session
 
-  const sendapi = async () => {
-    try {
-     const res = await axios.post("http://localhost:3000/api/newTimer");
-      res.time;
-      console.log(time);
-    } catch (error) {
-      console.error(error);
-    } throw error;
-  };
+//   const sendapi = async () => {
+//     try {
+//      const res = await axios.post("http://localhost:3000/api/newTimer");
+//       res.time;
+//       console.log(time);
+//     } catch (error) {
+//       console.error(error);
+//     } throw error;
+//   };
 
-  const getapi = async () => {
-    try {
-      const res = await axios.get("http://localhost:3000/api/getTimer");
-      console.log(res);
-    } catch (error) {
-      console.error(error);
+//   const getapi = async () => {
+//     try {
+//       const res = await axios.get("http://localhost:3000/api/getTimer");
+//       console.log(res);
+//     } catch (error) {
+//       console.error(error);
 
- }};
+//  }};
 
-getapi();
+// getapi();
 
 
   // Function to calculate the duration of each session segment
