@@ -28,28 +28,51 @@ const TrackingTable = () => {
       try {
         setLoading(true);
         const response = await instance.get("/viewRating");
-        console.log("Raw data from API:", response);
-        const timers = response.data.Rating || response.data || [];
-        const formattedData = timers.data.Rating.map((timer) => {
+       // console.log("Raw data from API:", response);
+  
+        // Access the Rating array directly
+        const timers = response.data.Ratings ; // Default to an empty array if undefined
+  
+        const formattedData = timers.map((timer) => {
           let formattedDate = "Unknown date";
           try {
             if (timer.createdAt) {
               const date = new Date(timer.createdAt);
+         
               if (!isNaN(date.getTime())) {
-                formattedDate = date.toISOString().split("T")[0];
+
+
+
+
+
+
+   
+
+                
+                  formattedDate = date.toLocaleString("en-US", {
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,})
+
+
+
+
+                
               }
             }
           } catch (err) {
             console.warn("Error formatting date for timer:", timer._id, err);
           }
-
+  
           return {
             id: timer._id || Math.random().toString(),
-            rating: timer.newRating || 0,
+            rating: timer.newRating || 0, // Adjust based on the actual property name
             date: formattedDate,
           };
         });
-
+  
         console.log("Formatted data:", formattedData);
         setTimerData(formattedData);
         setFilteredTimers(formattedData);
@@ -60,7 +83,7 @@ const TrackingTable = () => {
         setLoading(false);
       }
     };
-
+  
     fetchTimerData();
   }, []);
 

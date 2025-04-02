@@ -136,3 +136,7 @@ body{
   .view-button:hover {
     color: rgb(165, 180, 252);
   }
+
+  .session-actions{
+    cursor: pointer;
+  }
