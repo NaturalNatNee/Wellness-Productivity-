@@ -1,12 +1,12 @@
 .App {
   background-color: var(--background-color);
 }
-#root { /* STYLING FOR EVERYTHING */
+#root {
+  /* STYLING FOR EVERYTHING */
   padding: 2rem;
-
 }
 
-.Login{
+.Login {
   color: var(--primary-text-color);
   background-color: black;
 }

@@ -55,23 +55,14 @@ function Dashboard() {
       </div>
 
       <div className="dashboard-grid">
-        <div className="dashboard-box">
-          <h3>Start a Timer Session</h3>
-          <p>Timer</p>
           <button className="primary-btn" onClick={() => navigate("/timer")}>
             Start Timer
           </button>
         </div>
-
-        <div className="dashboard-box">
-          <h3>Insights</h3>
-          <p></p>
           <button className="primary-btn" onClick={() => navigate("/progress")}>
             View Stats
           </button>
         </div>
-      </div>
-    </div>
   );
 }
 
