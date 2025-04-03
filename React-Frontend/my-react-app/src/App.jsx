@@ -7,12 +7,13 @@ import {
 import React, { useState, useEffect } from 'react';
 import Login from "./components/authentication/Login";
 import Signup from "./components/authentication/Signup";
-import Dashboard from "./components/Dashboard.jsx";
+import Dashboard from "./components/Dashboard";
 import ProtectedRoute from "./components/authentication/ProtectedRoutes"; 
 import TrackingTable from "./components/TrackingTable/TrackingTable.jsx"
 import Timer from "./components/timer/Timer";
 import ChangePassword from "./components/authentication/ChangePassword.jsx";
 import Settings from "./components/Settings.jsx";
+import './styles.css';
 
 function App() {
     const [isDarkMode, setIsDarkMode] = useState(() => {

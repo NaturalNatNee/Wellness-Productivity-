@@ -109,24 +109,6 @@ h1{
   color: var(--base-color);
 }
 
-
-@media (max-width: 768px) {
-  .dashboard {
-    width: 100vw;
-    border-radius: 0;
-    padding: 20px;
-  }
-
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .dashboard {
-    position: relative;
-  }
-}
-
 .settings-btn {
   position: fixed;
   top: 20px;

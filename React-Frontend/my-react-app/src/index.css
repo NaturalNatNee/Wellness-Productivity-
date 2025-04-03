@@ -47,9 +47,40 @@ button {
   margin-left: 10px;
 }
 
-@media (max-width: 1100px) {
-  .wrapper {
+/* Fix for consistent white strip positioning */
+
+/* Keep both containers identical in positioning */
+.wrapper,
+.dashboard {
+  box-sizing: border-box;
+  background-color: var(--base-color);
+  color: var(--text-color);
+  height: 100vh;
+  width: max(40%, 600px); /* Use the same width formula for both */
+  padding: 10px;
+  border-radius: 0 20px 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Login page specific (wrapper) */
+.wrapper {
+  justify-content: center; /* Center content vertically */
+}
+
+/* Dashboard page specific */
+.dashboard {
+  justify-content: flex-start; /* Allow content to flow from top */
+  padding-top: 40px; /* Give some space at the top */
+}
+
+/* Media query to match your login page behavior */
+@media(max-width: 1100px){
+  .wrapper,
+  .dashboard {
     width: min(600px, 100%);
     border-radius: 0;
   }
 }
+

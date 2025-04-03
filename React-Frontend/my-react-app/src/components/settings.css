@@ -7,6 +7,10 @@ h2{
     color: var(--text-color);
 }
 
+.settings-header{
+  margin-top: 200px;
+}
+
 #Dark-Mode {
   position: fixed;
   top: 20px;

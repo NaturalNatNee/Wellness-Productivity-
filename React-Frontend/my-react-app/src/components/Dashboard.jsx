@@ -39,6 +39,7 @@ function Dashboard() {
       <button className="settings-btn" onClick={() => navigate("/settings")}>
         Settings
       </button>
+      <div className="user-welcome"></div>
       <header className="dashboard-header">
         <h1>ZenYourMess!</h1>
         <h2>Where Coders Compile Dreams and Execute Naps!</h2>
