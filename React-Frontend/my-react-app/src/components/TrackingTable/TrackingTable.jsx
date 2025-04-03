@@ -1,10 +1,32 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import "./TrackingTable.css";
+import authService from "../../services/authService";
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const token = localStorage.getItem("token");
-
 const instance = axios.create({
   baseURL: "http://localhost:3000/api/timer",
   headers: {
@@ -13,69 +35,54 @@ const instance = axios.create({
   },
 });
 
-
-
-
 const TrackingTable = () => {
   const [timerData, setTimerData] = useState([]);
-  const [filteredTimers, setFilteredTimers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchTimerData = async () => {
       try {
         setLoading(true);
-        const response = await instance.get("/viewRating");
-       // console.log("Raw data from API:", response);
-  
+
+        const currentUser = await authService.getCurrentUser();
+        if (!currentUser || !currentUser._id) {
+          throw new Error("User not logged in or user ID not found");
+        }
+        const userId = currentUser?._id;
+
+        const response = await instance.get(`/viewRating?userId=${userId}`);
+        console.log("Raw data from API:", response);
+
         // Access the Rating array directly
-        const timers = response.data.Ratings ; // Default to an empty array if undefined
-  
+        const timers = response.data.Ratings || [];
+
         const formattedData = timers.map((timer) => {
           let formattedDate = "Unknown date";
           try {
             if (timer.createdAt) {
               const date = new Date(timer.createdAt);
-         
+
               if (!isNaN(date.getTime())) {
-
-
-
-
-
-
-   
-
-                
-                  formattedDate = date.toLocaleString("en-US", {
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,})
-
-
-
-
-                
+                formattedDate = date.toLocaleDateString("en-US", {
+                  month: "2-digit",
+                  day: "2-digit",
+                  year: "numeric",
+                });
               }
             }
           } catch (err) {
             console.warn("Error formatting date for timer:", timer._id, err);
           }
-  
+
           return {
             id: timer._id || Math.random().toString(),
             rating: timer.newRating || 0, // Adjust based on the actual property name
             date: formattedDate,
           };
         });
-  
-        console.log("Formatted data:", formattedData);
+
         setTimerData(formattedData);
-        setFilteredTimers(formattedData);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching timer data:", err);
@@ -83,27 +90,35 @@ const TrackingTable = () => {
         setLoading(false);
       }
     };
-  
+
     fetchTimerData();
   }, []);
 
-  const handleSearch = (e) => {
-    const value = e.target.value.toLowerCase();
-    setSearchTerm(value);
-    const filtered = timerData.filter((timer) =>
-      timer.date.toLowerCase().includes(value)
-    );
-    setFilteredTimers(filtered);
+  // Prepare data for the chart
+  const chartData = {
+    labels: timerData.map((timer) => timer.date), // Dates as labels
+    datasets: [
+      {
+        label: "Productivity Rating",
+        data: timerData.map((timer) => timer.rating), // Ratings as data points
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        tension: 0.4, // Smooth curve
+      },
+    ],
   };
 
-  const getRatingClass = (rating) => {
-    if (rating >= 4) return "high-rating";
-    if (rating >= 2) return "medium-rating";
-    return "low-rating";
-  };
-
-  const getRatingDisplay = (rating) => {
-    return `${rating}/5`;
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Productivity Over Time",
+      },
+    },
   };
 
   return (
@@ -114,62 +129,15 @@ const TrackingTable = () => {
       transition={{ delay: 0.4 }}
     >
       <div className="header">
-        <h2 className="title">Session List</h2>
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search Sessions..."
-            className="search-input"
-            value={searchTerm}
-            onChange={handleSearch}
-          />
-        </div>
+        <h2 className="title">Productivity Chart</h2>
       </div>
-      <div className="table-container">
+      <div className="chart-container">
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
           <p className="error-message">{error}</p>
         ) : (
-          <table className="tracking-table">
-            <thead>
-              <tr>
-                <th>Rating</th>
-                <th>Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredTimers.length > 0 ? (
-                filteredTimers.map((timer) => (
-                  <motion.tr
-                    key={timer.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <td className="session-rating">
-                      <span
-                        className={`rating-badge ${getRatingClass(
-                          timer.rating
-                        )}`}
-                      >
-                        {getRatingDisplay(timer.rating)}
-                      </span>
-                    </td>
-                    <td className="session-date">{timer.date}</td>
-                    <td className="session-actions">View</td>
-                  </motion.tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="3" className="no-data">
-                    No sessions found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+          <Line data={chartData} options={chartOptions} />
         )}
       </div>
     </motion.div>

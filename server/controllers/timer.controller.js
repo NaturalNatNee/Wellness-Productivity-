@@ -49,13 +49,14 @@ router.post("/newRating", validateSession, async (req, res) => {
 //http://localhost:3000/api/timer/viewRating
 
 router.get("/viewRating", validateSession, async (req, res) => {
-  try {
-    const Ratings = await Timer.find();
+  try {   
+     const userId = req.user.id || req.user._id; // Handle both formats
+    const Ratings = await Timer.find({userId});
 
     res.json({
       message: "success from get",
       Ratings: Ratings,
-      userId: req.user._id,
+      userId: req.userId,
     });
   } catch (error) {
     res.status(500).json({
