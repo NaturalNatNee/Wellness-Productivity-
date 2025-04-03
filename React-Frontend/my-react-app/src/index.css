@@ -1,8 +1,8 @@
 :root {
   --accent-color: #29812f;
   --base-color: white;
-  --text-color: #2E2B41;
-  --input-color: #F3F0FF;
+  --text-color: #2e2b41;
+  --input-color: #f3f0ff;
   --background-color: white;
   --foreground-color: green;
   --primary-text-color: black;
@@ -31,12 +31,24 @@
   --tile-bg: rgb(58, 98, 57);
   --toggle-bg: #444;
   --toggle-fg: #f5f5f5;
-   --shadow-color: gray;
-   --hover-color: #2f9436;
+  --shadow-color: gray;
+  --hover-color: #2f9436;
 }
 
-@media(max-width: 1100px){
-  .wrapper{
+button {
+  border-radius: 1000px;
+  background-color: var(--accent-color);
+  color: var(--base-color);
+  font: inherit;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 150ms ease;
+  margin-left: 10px;
+}
+
+@media (max-width: 1100px) {
+  .wrapper {
     width: min(600px, 100%);
     border-radius: 0;
   }

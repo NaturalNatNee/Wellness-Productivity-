@@ -48,6 +48,26 @@ const authService = {
   logout: () => {
     localStorage.removeItem("token");
   },
+
+
+  //change password
+  changePassword: async (currentPassword, newPassword) => {
+    try{
+      //gets token from local storage
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        //backend endpoint
+        `${API_URL}/change-password`,
+        { currentPassword, newPassword},
+        {
+          headers: { Authorization: `Bearer ${token}`},
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
+  }
 };
 
 export default authService;

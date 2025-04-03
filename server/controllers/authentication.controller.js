@@ -172,7 +172,7 @@ router.delete("/user", auth, async (req, res) => {
 });
 
 //change password
-router.put("/password", auth, async (req, res) => {
+router.put("/change-password", auth, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
 
   try {

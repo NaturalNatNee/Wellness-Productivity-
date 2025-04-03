@@ -31,18 +31,13 @@ function Dashboard() {
     fetchUserData();
   }, [navigate]);
 
-  const handleLogout = () => {
-    authService.logout();
-    navigate("/login");
-  };
-
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="dashboard">
-      <button className="logout-btn" onClick={handleLogout}>
-        Logout
+      <button className="settings-btn" onClick={() => navigate("/settings")}>
+        Settings
       </button>
       <header className="dashboard-header">
         <h1>ZenYourMess!</h1>
@@ -55,14 +50,14 @@ function Dashboard() {
       </div>
 
       <div className="dashboard-grid">
-          <button className="primary-btn" onClick={() => navigate("/timer")}>
-            Start Timer
-          </button>
-        </div>
-          <button className="primary-btn" onClick={() => navigate("/progress")}>
-            View Stats
-          </button>
-        </div>
+        <button className="primary-btn" onClick={() => navigate("/timer")}>
+          Start Timer
+        </button>
+      </div>
+      <button className="primary-btn" onClick={() => navigate("/progress")}>
+        View Stats
+      </button>
+    </div>
   );
 }
 

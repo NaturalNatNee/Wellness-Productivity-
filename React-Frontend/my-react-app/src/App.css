@@ -10,3 +10,11 @@
   color: var(--primary-text-color);
   background-color: black;
 }
+
+#Dark-Mode {
+  position: fixed;
+  top: 20px;
+  width: auto;
+}
+
+

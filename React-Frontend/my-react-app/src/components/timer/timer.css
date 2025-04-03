@@ -8,6 +8,20 @@ body {
   margin: 0;
 }
 
+.dashboard-btn{
+  border-radius: 1000px;
+  background-color: var(--accent-color);
+  color: var(--base-color);
+  font: inherit;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 150ms ease;
+  position: absolute;
+  margin-bottom: -700px;
+  margin-left: 4050px;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -15,9 +29,12 @@ body {
   justify-content: center;
   height: 100vh;
 }
+h3{
+  color: var(--text-color);
+}
 
 .clock {
-  background-color: #0056b3;
+  background-color: var(--base-color);
   border-radius: 50%;
   height: 35vh;
   width: 35vh;

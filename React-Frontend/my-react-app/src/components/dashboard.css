@@ -122,19 +122,14 @@ h1{
     gap: 15px;
   }
 
-  .logout-btn:hover {
-    background-color: var(--hover-color);
-    transform: scale(1.05);
-    color: var(--base-color);
-  }
-
   .dashboard {
     position: relative;
   }
 }
 
-#Dark-Mode {
+.settings-btn {
   position: fixed;
   top: 20px;
+  margin-left: 420px;
   width: auto;
 }

@@ -1,7 +1,10 @@
+import React, { use } from "react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 import "./TrackingTable.css";
+import Dashboard from "../Dashboard";
 
 const token = localStorage.getItem("token");
 
@@ -15,8 +18,8 @@ const instance = axios.create({
 
 
 
-
 const TrackingTable = () => {
+  const navigate = useNavigate();
   const [timerData, setTimerData] = useState([]);
   const [filteredTimers, setFilteredTimers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -106,73 +109,106 @@ const TrackingTable = () => {
     return `${rating}/5`;
   };
 
+    useEffect(() => {
+      // Fetch user data when component mounts
+      const fetchUserData = async () => {
+        try {
+          const userData = await authService.getCurrentUser();
+          setUser(userData);
+        } catch (err) {
+          setError("Failed to load user data");
+          // If authentication fails, redirect to login
+          if (err.message?.includes("unauthorized")) {
+            navigate("/login");
+          }
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchUserData();
+    }, [navigate]); 
+
+
   return (
-    <motion.div
-      className="tracking-container"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4 }}
-    >
-      <div className="header">
-        <h2 className="title">Session List</h2>
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search Sessions..."
-            className="search-input"
-            value={searchTerm}
-            onChange={handleSearch}
-          />
+    <div>
+      {" "}
+      <div>
+        <button
+          className="primary-btn"
+          id="dashboard-btn"
+          onClick={() => navigate("/dashboard")}
+        >
+          Dashboard
+        </button>
+      </div>
+      <motion.div
+        className="tracking-container"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+      >
+        <div className="header">
+          <h2 className="title">Session List</h2>
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search Sessions..."
+              className="search-input"
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+          </div>
         </div>
-      </div>
-      <div className="table-container">
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p className="error-message">{error}</p>
-        ) : (
-          <table className="tracking-table">
-            <thead>
-              <tr>
-                <th>Rating</th>
-                <th>Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredTimers.length > 0 ? (
-                filteredTimers.map((timer) => (
-                  <motion.tr
-                    key={timer.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <td className="session-rating">
-                      <span
-                        className={`rating-badge ${getRatingClass(
-                          timer.rating
-                        )}`}
-                      >
-                        {getRatingDisplay(timer.rating)}
-                      </span>
-                    </td>
-                    <td className="session-date">{timer.date}</td>
-                    <td className="session-actions">View</td>
-                  </motion.tr>
-                ))
-              ) : (
+        <div className="table-container">
+          {loading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p className="error-message">{error}</p>
+          ) : (
+            <table className="tracking-table">
+              <thead>
                 <tr>
-                  <td colSpan="3" className="no-data">
-                    No sessions found
-                  </td>
+                  <th>Rating</th>
+                  <th>Date</th>
+                  <th>Actions</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        )}
-      </div>
-    </motion.div>
+              </thead>
+              <tbody>
+                {filteredTimers.length > 0 ? (
+                  filteredTimers.map((timer) => (
+                    <motion.tr
+                      key={timer.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <td className="session-rating">
+                        <span
+                          className={`rating-badge ${getRatingClass(
+                            timer.rating
+                          )}`}
+                        >
+                          {getRatingDisplay(timer.rating)}
+                        </span>
+                      </td>
+                      <td className="session-date">{timer.date}</td>
+                      <td className="session-actions">View</td>
+                    </motion.tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3" className="no-data">
+                      No sessions found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </motion.div>
+    </div>
   );
 };
 

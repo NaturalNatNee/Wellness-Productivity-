@@ -11,7 +11,8 @@ import Dashboard from "./components/Dashboard.jsx";
 import ProtectedRoute from "./components/authentication/ProtectedRoutes"; 
 import TrackingTable from "./components/TrackingTable/TrackingTable.jsx"
 import Timer from "./components/timer/Timer";
-
+import ChangePassword from "./components/authentication/ChangePassword.jsx";
+import Settings from "./components/Settings.jsx";
 
 function App() {
     const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -48,7 +49,7 @@ function App() {
                textTransform: "uppercase",
                cursor: "pointer",
                transition: "150ms ease",
-               marginLeft: "10px"
+               marginLeft: "10px",
              }}
            >
              DARK/LIGHT
@@ -65,6 +66,8 @@ function App() {
                <Route path="/timer" element={<Timer />} />
                <Route path="/progress" element={<TrackingTable />} />
                <Route path="/dashboard" element={<Dashboard />} />
+               <Route path="/change-password" element={<ChangePassword />} />
+               <Route path="/settings" element={<Settings />} />
                {/* Add other protected routes here */}
              </Route>
 

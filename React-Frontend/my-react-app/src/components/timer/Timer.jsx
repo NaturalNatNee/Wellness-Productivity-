@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import Rating from "./Rating";
 import "./timer.css";
 
 function Timer() {
   // State variables to manage the timer and user interactions
+  const navigate = useNavigate();
   const [time, setTime] = useState(null); // Tracks the remaining time in milliseconds
   const [hours, setHours] = useState(0); // Stores the number of hours for the session
   const [minutes, setMinutes] = useState(0); // Stores the number of minutes for the session
@@ -146,9 +147,17 @@ function Timer() {
     }`; // Format the time as HH:MM:SS
   };
 
+
   // Render the timer UI and handle user interactions
   return (
     <div className="container">
+      <button
+        className="primary-btn"
+        id="dashboard-btn"
+        onClick={() => navigate("/dashboard")}
+      >
+        Dashboard
+      </button>
       <div className="clock">
         <h1 className="timer">
           {isTimeAvailable ? formattedTime() : "Set Session"}{" "}
@@ -161,20 +170,17 @@ function Timer() {
         </h3>
       </div>
       <div className="timer-container">
-
         <input
           className="time"
           type="number"
           placeholder="hour"
           onChange={(e) => setHours(Number(e.target.value))} // Update the hours state when the user inputs a value
           disabled={isTimeAvailable} // Disable the input if the timer is running
-
         />
         <input
           className="time"
           type="number"
           placeholder="minutes"
-
           onChange={(e) => setMinutes(Number(e.target.value))} // Update the minutes state when the user inputs a value
           disabled={isTimeAvailable} // Disable the input if the timer is running
         />
@@ -184,12 +190,10 @@ function Timer() {
           placeholder="break minutes"
           onChange={(e) => setBreakMinutes(Number(e.target.value))} // Update the break duration when the user inputs a value
           disabled={isTimeAvailable} // Disable the input if the timer is running
-
         />
         <input
           className="time"
           type="number"
-
           placeholder="break count"
           onChange={(e) => setBreakCount(Number(e.target.value))} // Update the number of breaks when the user inputs a value
           disabled={isTimeAvailable} // Disable the input if the timer is running
@@ -225,7 +229,6 @@ function Timer() {
             </option>
           ))}
         </select>
-       
       </div>
       {sessionCompleted && (
         <div className="rating-section">
@@ -235,7 +238,6 @@ function Timer() {
         </div>
       )}
     </div>
-
   );
 }
 
